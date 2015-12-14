@@ -41,6 +41,9 @@ class SlackBot extends Adapter
     @client.on 'userChange', @.userChange
     @robot.brain.on 'loaded', @.brainLoaded
 
+    # add this line
+    @client.on 'raw_message', @.rawMessage
+
     @robot.on 'slack-attachment', @.customMessage
     @robot.on 'slack.attachment', @.customMessage
 
@@ -282,6 +285,9 @@ class SlackBot extends Adapter
   topic: (envelope, strings...) ->
     channel = @client.getChannelGroupOrDMByName envelope.room
     channel.setTopic strings.join "\n"
+
+  rawMessage: (data) =>
+    @robot.emit('message', data)
 
   customMessage: (data) =>
 
